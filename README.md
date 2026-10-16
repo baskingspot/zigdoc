@@ -24,8 +24,9 @@ nix run github:baskingspot/zigdoc -- std.ArrayList
 ```
 
 From a release: each [release](https://github.com/baskingspot/zigdoc/releases) has tarballs for
-Linux on x86_64 and aarch64 and for macOS on aarch64, with a `SHA256SUMS` file. Check a download
-with `gh attestation verify <file> -R baskingspot/zigdoc`.
+Linux on x86_64 and aarch64 and for macOS on aarch64, a zip for Windows, and a `SHA256SUMS` file.
+Check a download with
+`gh attestation verify <file> -R baskingspot/zigdoc --signer-repo baskingspot/gh-actions`.
 
 From source:
 
