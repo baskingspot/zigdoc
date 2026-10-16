@@ -17,17 +17,32 @@ pub fn main(init: std.process.Init) !void {
     defer allocator.free(help_content);
 
     const readme = try std.fmt.allocPrint(allocator,
-        \\# zigdoc
+        \\<h1>
+        \\  <picture>
+        \\    <source media="(prefers-color-scheme: dark)" srcset="docs/static/logo-dark.svg">
+        \\    <img src="docs/static/logo.svg" alt="zigdoc" height="48">
+        \\  </picture>
+        \\</h1>
         \\
         \\A command-line tool to view documentation for Zig standard library symbols.
         \\
         \\## Installation
         \\
+        \\zigdoc runs `zig` to find the standard library, so `zig` must be on your `PATH`.
+        \\
         \\With mise:
         \\
         \\```bash
-        \\mise use -g github:rockorager/zigdoc
+        \\mise use -g github:baskingspot/zigdoc
         \\```
+        \\
+        \\With Nix:
+        \\
+        \\```bash
+        \\nix run github:baskingspot/zigdoc -- std.ArrayList
+        \\```
+        \\
+        \\From a release: each [release](https://github.com/baskingspot/zigdoc/releases) has tarballs for Linux on x86_64 and aarch64 and for macOS on aarch64, with a `SHA256SUMS` file. Check a download with `gh attestation verify <file> -R baskingspot/zigdoc`.
         \\
         \\From source:
         \\
@@ -69,6 +84,16 @@ pub fn main(init: std.process.Init) !void {
         \\- Shows symbol location, category, and signature
         \\- Displays doc comments and members
         \\- Follows aliases to implementation
+        \\
+        \\## Work on it
+        \\
+        \\`nix develop` provides the toolchain, and `just ci` runs what CI runs. `README.md` is generated: change `build_readme.zig`, then run `zig build readme`.
+        \\
+        \\## License
+        \\
+        \\MIT. See `LICENSE`. The logo files in `docs/static/` are baskingspot marks and are not covered by it. See `docs/static/LICENSE`.
+        \\
+        \\<a href="https://github.com/baskingspot"><img src="https://raw.githubusercontent.com/baskingspot/.github/main/brand/assets/badge.svg" alt="baskingspot" height="24"></a>
         \\
     , .{help_content});
     defer allocator.free(readme);
