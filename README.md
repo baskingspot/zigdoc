@@ -23,7 +23,9 @@ With Nix:
 nix run github:baskingspot/zigdoc -- std.ArrayList
 ```
 
-From a release: each [release](https://github.com/baskingspot/zigdoc/releases) has tarballs for Linux on x86_64 and aarch64 and for macOS on aarch64, with a `SHA256SUMS` file. Check a download with `gh attestation verify <file> -R baskingspot/zigdoc`.
+From a release: each [release](https://github.com/baskingspot/zigdoc/releases) has tarballs for
+Linux on x86_64 and aarch64 and for macOS on aarch64, with a `SHA256SUMS` file. Check a download
+with `gh attestation verify <file> -R baskingspot/zigdoc`.
 
 From source:
 
@@ -88,10 +90,14 @@ zigdoc zeit.timezone.Posix
 
 ## Work on it
 
-`nix develop` provides the toolchain, and `just ci` runs what CI runs. `README.md` is generated: change `build_readme.zig`, then run `zig build readme`.
+`nix develop` provides the toolchain, and `just ci` runs what CI runs. `README.md` is generated:
+change `build_readme.zig`, then run `zig build readme`.
 
 ## License
 
-MIT. See `LICENSE`. The logo files in `docs/static/` are baskingspot marks and are not covered by it. See `docs/static/LICENSE`.
+MIT. See `LICENSE`. The logo files in `docs/static/` are baskingspot marks and are not covered
+by it. See `docs/static/LICENSE`.
 
-<a href="https://github.com/baskingspot"><img src="https://raw.githubusercontent.com/baskingspot/.github/main/brand/assets/badge.svg" alt="baskingspot" height="24"></a>
+<a href="https://github.com/baskingspot"><img
+src="https://raw.githubusercontent.com/baskingspot/.github/main/brand/assets/badge.svg"
+alt="baskingspot" height="24"></a>
