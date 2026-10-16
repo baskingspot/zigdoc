@@ -166,3 +166,15 @@ defer writer.deinit();
 try writer.writer.print("hello {s}", .{"world"});
 const output = try writer.toOwnedSlice();
 ```
+
+## House conventions
+
+`nix develop` provides the toolchain, and the justfile is the command interface: `just test`, `just lint`, and `just ci`. `just ci` also builds the Nix package in the sandbox, so run `just zon2nix` after a dependency bump.
+
+`README.md` is generated from `build_readme.zig`. Edit the template there and run `zig build readme`.
+
+Commit messages are one line, `area: summary`, and every commit is signed. The release notes group the commits by area.
+
+`just release VERSION` tags and pushes. The release workflow builds the targets in `.github/release.yaml`, so never upload release assets by hand.
+
+The logos in `docs/static/` are baskingspot marks and are not covered by the MIT license.
