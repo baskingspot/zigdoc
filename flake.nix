@@ -36,9 +36,9 @@
           };
 
           devShells.default = pkgs.mkShell {
-            inputsFrom = with config.devShells; [
-              base
-              zig
+            inputsFrom = [
+              config.devShells.base
+              config.devShells."zig-0-16"
             ];
 
             packages = [
