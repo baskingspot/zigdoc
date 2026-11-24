@@ -5,6 +5,8 @@ Changes a user of zigdoc notices, newest first, in the
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-24
+
 zigdoc moves to the baskingspot org, and the releases with it: a zip for Windows, a Homebrew cask, and an attestation on every archive. The command works as it did, apart from one module lookup fix.
 
 ### Added
