@@ -2,7 +2,7 @@
 title = "zigdoc"
 +++
 
-A command-line tool to view documentation for Zig standard library symbols.
+Zig standard library documentation in the terminal.
 
 The doc comments in the Zig standard library are the manual, and they are spread
 over hundreds of files. `zigdoc std.mem.Allocator` prints the comment, the file

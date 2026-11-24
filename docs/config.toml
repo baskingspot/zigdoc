@@ -4,7 +4,7 @@
 base_url = "https://baskingspot.dev/zigdoc"
 theme = "baskingspot"
 title = "zigdoc"
-description = "A command-line tool to view documentation for Zig standard library symbols."
+description = "Zig standard library documentation in the terminal."
 
 generate_feeds = false
 build_search_index = false

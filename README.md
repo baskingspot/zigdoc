@@ -5,7 +5,7 @@
   </picture>
 </h1>
 
-A command-line tool to view documentation for Zig standard library symbols.
+Zig standard library documentation in the terminal.
 
 The doc comments in the Zig standard library are the manual, and they are spread over hundreds of files. `zigdoc std.mem.Allocator` prints the comment, the file and line, the signature, and the members, without leaving the terminal. Run it in a project and it reads the modules that `build.zig` declares, so a dependency is documented the same way.
 
