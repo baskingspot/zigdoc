@@ -7,9 +7,21 @@
   callPackage,
   zig_0_16,
 }:
+let
+  # The version comes from build.zig.zon, which release-prep.py rewrites. If
+  # that line ever stops matching, this evaluation fails instead of shipping a
+  # stale version.
+  version = lib.head (
+    builtins.match ''[ ]*\.version = "([^"]+)".*'' (
+      lib.findFirst (line: lib.hasInfix ".version = " line) "" (
+        lib.splitString "\n" (builtins.readFile ../build.zig.zon)
+      )
+    )
+  );
+in
 stdenv.mkDerivation {
   pname = "zigdoc";
-  version = "0.5.1";
+  inherit version;
   src = lib.fileset.toSource {
     root = ../.;
     fileset = lib.fileset.unions [
@@ -26,7 +38,7 @@ stdenv.mkDerivation {
   ];
   meta = {
     description = "A command-line tool to view documentation for Zig standard library symbols";
-    homepage = "https://github.com/rockorager/zigdoc";
+    homepage = "https://github.com/baskingspot/zigdoc";
     license = lib.licenses.mit;
     mainProgram = "zigdoc";
     platforms = lib.platforms.unix;
