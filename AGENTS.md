@@ -28,8 +28,7 @@ zigdoc <module>.<symbol>
 
 - Run `zig build test` after code changes; it also checks formatting.
 - Use `zig build fmt` when only a formatting check is needed.
-- Run `zig build readme` when CLI usage or help text changes, and include the
-  resulting `README.md` update.
+- Run `zig build reference` when CLI usage or help text changes. The step rewrites `docs/content/reference.md`, the guide's command reference page.
 
 ## Zig Style
 
@@ -169,12 +168,12 @@ const output = try writer.toOwnedSlice();
 
 ## House conventions
 
-`nix develop` provides the toolchain, and the justfile is the command interface: `just test`, `just lint`, and `just ci`. `just ci` also builds the Nix package in the sandbox, so run `just zon2nix` after a dependency bump.
+`nix develop` provides the toolchain and the site tools, and the justfile is the command interface: `just test`, `just lint`, `just doc`, and `just ci`. `just ci` also builds the Nix package in the sandbox, so run `just zon2nix` after a dependency bump.
 
-`README.md` is generated from `build_readme.zig`. Edit the template there and run `zig build readme`.
+The guide is `docs/content/_index.md`, served at baskingspot.dev/zigdoc/. `docs/content/reference.md` is generated from `zigdoc --help` by `zig build reference`, which `just doc` runs first. Do not edit the generated page.
 
-Commit messages are one line, `area: summary`, and every commit is signed. The release notes group the commits by area.
+Commit messages are one line, `area: summary`, and every commit is signed.
 
-`just release VERSION` tags and pushes. The release workflow builds the targets in `.github/release.yaml`, so never upload release assets by hand.
+`just release VERSION` tags and pushes. The release workflow builds the targets in `.github/release.yaml`, and the notes are `docs/releases/vTAG.md`, so never upload release assets by hand.
 
 The logos in `docs/static/` are baskingspot marks and are not covered by the MIT license.
