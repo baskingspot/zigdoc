@@ -15,6 +15,12 @@ The doc comments in the Zig standard library are the manual, and they are spread
 - [Modules from your build](https://baskingspot.dev/zigdoc/#modules-from-your-build): `zigdoc vaxis.Window` reads the modules that your `build.zig` declares, and `--dump-imports` prints them as JSON.
 - [Starting a project](https://baskingspot.dev/zigdoc/#starting-a-project): `zigdoc @init` writes a Zig 0.16 project with an `AGENTS.md` that tells a coding agent how to work in it.
 
+Not implemented:
+
+- A pinned standard library: zigdoc reads the `zig` on `PATH`, and `ZIG_LIB_DIR` points it at another lib directory.
+- Modules that `build.zig` does not declare, even when a source file imports one.
+- A quiet run: the import trace goes to stderr on every run.
+
 ## Install
 
 zigdoc runs `zig` to find the standard library, so `zig` must be on `PATH`. It reads projects on Zig 0.14, 0.15, and 0.16.

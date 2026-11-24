@@ -13,6 +13,7 @@ so a dependency is documented the same way.
 - [Symbols](#symbols): one symbol at a time, with its doc comment, signature, and members. `zigdoc std.mem.Allocator` prints all four.
 - [Modules from your build](#modules-from-your-build): `zigdoc vaxis.Window` reads the modules that your `build.zig` declares, and `--dump-imports` prints them as JSON.
 - [Starting a project](#starting-a-project): `zigdoc @init` writes a Zig 0.16 project with an `AGENTS.md` that tells a coding agent how to work in it.
+- [Limits](#limits): one standard library, the modules the build declares, and no quiet run.
 
 The [command reference](reference/) lists every option and command, as
 `zigdoc --help` prints them.
@@ -150,8 +151,9 @@ first. The `build.zig` that `@init` writes runs ziglint with `zig build test`.
 
 # Limits
 
-- zigdoc reads the standard library of the `zig` on `PATH`, not a pinned one. Two Zig versions on one machine need one of them selected before the comparison is meaningful.
-- Only public declarations are documented, and only the ones the walk reaches: a file that nothing imports is not in the table.
+- zigdoc reads the standard library of the `zig` on `PATH`. `ZIG_LIB_DIR` points it at another lib directory, and no flag does.
+- Only the public declarations that the walk reaches are documented. A file that nothing imports is not in the table.
 - A module that `build.zig` does not declare is invisible, even when a source file imports it. `zigdoc --dump-imports` lists what zigdoc sees.
-- Windows is a shipped target, not a tested shell. The build runner in a Windows shell has not been exercised.
-- The program prints its import trace to stderr on every run, which is noise next to the answer you asked for. It is unfixed.
+- `zigdoc @init` writes a Zig 0.16 project. A project on another version is written by hand.
+- Windows is a shipped target, not a tested shell. The build runner has not been run there.
+- The import trace goes to stderr on every run, which is noise next to the answer you asked for. Issue #7 tracks it.
