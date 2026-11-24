@@ -16,29 +16,29 @@ pub fn build(b: *std.Build) void {
 
     b.installArtifact(exe);
 
-    // Keep README generation explicit so installs only install the binary.
-    const readme_run = b.addRunArtifact(exe);
-    readme_run.addArg("--help");
-    const help_output = readme_run.captureStdOut(.{});
+    // Keep the command reference explicit so installs only install the binary.
+    const reference_run = b.addRunArtifact(exe);
+    reference_run.addArg("--help");
+    const help_output = reference_run.captureStdOut(.{});
 
-    const gen_readme = b.addExecutable(.{
-        .name = "gen_readme",
+    const gen_reference = b.addExecutable(.{
+        .name = "gen_reference",
         .root_module = b.createModule(.{
-            .root_source_file = b.path("build_readme.zig"),
+            .root_source_file = b.path("build_reference.zig"),
             .target = target,
             .optimize = .ReleaseFast,
         }),
     });
 
-    const run_gen = b.addRunArtifact(gen_readme);
+    const run_gen = b.addRunArtifact(gen_reference);
     run_gen.addFileArg(help_output);
-    const readme_file = run_gen.addOutputFileArg("README.md");
+    const reference_file = run_gen.addOutputFileArg("reference.md");
 
-    const update_readme = b.addUpdateSourceFiles();
-    update_readme.addCopyFileToSource(readme_file, "README.md");
+    const update_reference = b.addUpdateSourceFiles();
+    update_reference.addCopyFileToSource(reference_file, "docs/content/reference.md");
 
-    const readme_step = b.step("readme", "Regenerate README.md");
-    readme_step.dependOn(&update_readme.step);
+    const reference_step = b.step("reference", "Regenerate docs/content/reference.md, the command reference page");
+    reference_step.dependOn(&update_reference.step);
 
     const run_step = b.step("run", "Run the app");
     const run_cmd = b.addRunArtifact(exe);
@@ -64,7 +64,7 @@ pub fn build(b: *std.Build) void {
 
     const fmt_step = b.step("fmt", "Check code formatting");
     const fmt_check = b.addFmt(.{
-        .paths = &.{ "src", "build.zig", "build.zig.zon", "build_readme.zig" },
+        .paths = &.{ "src", "build.zig", "build.zig.zon", "build_reference.zig" },
         .check = true,
     });
     fmt_step.dependOn(&fmt_check.step);
@@ -75,7 +75,7 @@ pub fn build(b: *std.Build) void {
     lint_step.dependOn(ziglint.addLint(
         b,
         ziglint_dep,
-        &.{ b.path("src"), b.path("build.zig"), b.path("build_readme.zig") },
+        &.{ b.path("src"), b.path("build.zig"), b.path("build_reference.zig") },
     ));
     test_step.dependOn(lint_step);
 }

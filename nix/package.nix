@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     fileset = lib.fileset.unions [
       ../build.zig
       ../build.zig.zon
-      ../build_readme.zig
+      ../build_reference.zig
       ../src
     ];
   };

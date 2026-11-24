@@ -25,7 +25,7 @@ zon2nix:
 [group("lint")]
 lint:
     ziglint
-    zig fmt --check src build.zig build_readme.zig
+    zig fmt --check src build.zig build_reference.zig
     nix fmt -- --ci
     oxfmt --check README.md AGENTS.md .github scripts
     actionlint
@@ -35,7 +35,7 @@ lint:
 [doc("Format everything lint checks")]
 [group("lint")]
 fmt:
-    zig fmt src build.zig build_readme.zig
+    zig fmt src build.zig build_reference.zig
     nix fmt
     oxfmt README.md AGENTS.md .github scripts
     just --fmt
@@ -57,6 +57,26 @@ release VERSION:
     git tag -s "v{{ VERSION }}" -m "v{{ VERSION }}"
     git push origin "v{{ VERSION }}"
 
-[doc("Everything CI runs")]
+[doc("Regenerate docs/content/reference.md, the command reference page, from `zigdoc --help`")]
+[group("docs")]
+reference:
+    zig build reference
+
+[doc("Build the site into zig-out/site/zigdoc/: the guide and the command reference. The router in baskingspot/site serves /zigdoc/... from it")]
+[group("docs")]
+doc: reference
+    baskingspot-docs build zigdoc
+
+[doc("Edit the guide with live reload (http://127.0.0.1:1111)")]
+[group("docs")]
+guide: reference
+    baskingspot-docs serve zigdoc
+
+[doc("Deploy the rendered docs to Cloudflare as an assets-only Worker (config in wrangler.jsonc). Needs CLOUDFLARE_API_TOKEN in the environment, plus CLOUDFLARE_ACCOUNT_ID if the token can see more than one account")]
+[group("docs")]
+doc-deploy: doc
+    wrangler deploy
+
+[doc("Everything CI runs: the tests, the Nix package, the lint, and the docs build")]
 [group("ci")]
-ci: test package lint
+ci: test package lint doc

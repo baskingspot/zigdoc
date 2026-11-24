@@ -5,3 +5,13 @@ zig-pkg/
 .envrc.local
 result
 dist/
+
+# Local wrangler state.
+.wrangler/
+
+# The link baskingspot-docs makes to the theme.
+docs/themes/
+
+# Build products of `just doc`.
+docs/content/changelog.md
+docs/content/reference.md

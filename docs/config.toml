@@ -1,0 +1,25 @@
+# The zigdoc guide, served at baskingspot.dev/zigdoc/. The theme and the site
+# build come from baskingspot-docs; the router in baskingspot/site serves
+# /zigdoc/... from the built site.
+base_url = "https://baskingspot.dev/zigdoc"
+theme = "baskingspot"
+title = "zigdoc"
+description = "A command-line tool to view documentation for Zig standard library symbols."
+
+generate_feeds = false
+build_search_index = false
+
+[markdown]
+insert_anchor_links = "heading"
+
+[markdown.highlighting]
+# An unknown fence language is a build error, not an unhighlighted block.
+error_on_missing_language = true
+light_theme = "github-light"
+dark_theme = "github-dark"
+
+[extra]
+repo = "baskingspot/zigdoc"
+# The command reference is a page, not a docgen API, so there is no API link.
+api = false
+third_party = false
