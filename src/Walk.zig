@@ -58,17 +58,17 @@ pub const Category = union(enum(u8)) {
 pub const File = struct {
     ast: Ast,
     /// Maps identifiers to the declarations they point to.
-    ident_decls: std.AutoArrayHashMapUnmanaged(Ast.TokenIndex, Ast.Node.Index) = .empty,
+    ident_decls: std.array_hash_map.Auto(Ast.TokenIndex, Ast.Node.Index) = .empty,
     /// Maps field access identifiers to the containing field access node.
-    token_parents: std.AutoArrayHashMapUnmanaged(Ast.TokenIndex, Ast.Node.Index) = .empty,
+    token_parents: std.array_hash_map.Auto(Ast.TokenIndex, Ast.Node.Index) = .empty,
     /// Maps declarations to their global index.
-    node_decls: std.AutoArrayHashMapUnmanaged(Ast.Node.Index, Decl.Index) = .empty,
+    node_decls: std.array_hash_map.Auto(Ast.Node.Index, Decl.Index) = .empty,
     /// Maps function declarations to doctests.
-    doctests: std.AutoArrayHashMapUnmanaged(Ast.Node.Index, Ast.Node.Index) = .empty,
+    doctests: std.array_hash_map.Auto(Ast.Node.Index, Ast.Node.Index) = .empty,
     /// root node => its namespace scope
     /// struct/union/enum/opaque decl node => its namespace scope
     /// local var decl node => its local variable scope
-    scopes: std.AutoArrayHashMapUnmanaged(Ast.Node.Index, *Scope) = .empty,
+    scopes: std.array_hash_map.Auto(Ast.Node.Index, *Scope) = .empty,
 
     pub fn lookupToken(file: *File, token: Ast.TokenIndex) Decl.Index {
         const decl_node = file.ident_decls.get(token) orelse return .none;
@@ -339,16 +339,16 @@ pub const File = struct {
                     return Category.makeAlias(File.Index.findRootDecl(imported_file_index), node);
                 }
 
-                const resolved_path = if (std.fs.path.isAbsolute(file_path))
+                const resolved_path = if (std.Io.Dir.path.isAbsolute(file_path))
                     std.Io.Dir.realPathFileAbsoluteAlloc(io, file_path, gpa) catch file_path
                 else blk: {
                     const base_path = file_index.path();
-                    break :blk std.fs.path.resolve(gpa, &.{
+                    break :blk std.Io.Dir.path.resolve(gpa, &.{
                         base_path, "..", file_path,
                     }) catch @panic("OOM");
                 };
                 defer {
-                    if (!std.fs.path.isAbsolute(file_path) or resolved_path.ptr != file_path.ptr) {
+                    if (!std.Io.Dir.path.isAbsolute(file_path) or resolved_path.ptr != file_path.ptr) {
                         gpa.free(resolved_path);
                     }
                 }
@@ -434,7 +434,7 @@ pub fn addFile(file_name: []const u8, bytes: []u8) !File.Index {
     const ast = try parse(file_name, bytes);
     assert(ast.errors.len == 0);
 
-    const normalized_path = if (std.fs.path.isAbsolute(file_name))
+    const normalized_path = if (std.Io.Dir.path.isAbsolute(file_name))
         std.Io.Dir.realPathFileAbsoluteAlloc(io, file_name, gpa) catch file_name
     else
         std.Io.Dir.cwd().realPathFileAlloc(io, file_name, gpa) catch file_name;
@@ -521,8 +521,8 @@ pub const Scope = struct {
     const Namespace = struct {
         base: Scope = .{ .tag = .namespace },
         parent: *Scope,
-        names: std.StringArrayHashMapUnmanaged(Ast.Node.Index) = .empty,
-        doctests: std.StringArrayHashMapUnmanaged(Ast.Node.Index) = .empty,
+        names: std.array_hash_map.String(Ast.Node.Index) = .empty,
+        doctests: std.array_hash_map.String(Ast.Node.Index) = .empty,
         decl_index: Decl.Index,
     };
 

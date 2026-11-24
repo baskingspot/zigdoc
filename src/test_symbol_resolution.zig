@@ -12,7 +12,7 @@ fn setupTest(allocator: std.mem.Allocator) !void {
 }
 
 fn addTestFile(allocator: std.mem.Allocator, name: []const u8, source: []const u8) !Walk.File.Index {
-    const owned = try allocator.dupeZ(u8, source);
+    const owned = try allocator.dupeSentinel(u8, source, 0);
     return Walk.addFile(name, owned);
 }
 

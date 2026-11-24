@@ -104,7 +104,7 @@ fn initProject(allocator: std.mem.Allocator, io: std.Io) !void {
     // Get project name from current directory
     var path_buf: [std.Io.Dir.max_path_bytes]u8 = undefined;
     const cwd_path = path_buf[0..try std.process.currentPath(io, &path_buf)];
-    const name = std.fs.path.basename(cwd_path);
+    const name = std.Io.Dir.path.basename(cwd_path);
 
     // Create src directory
     try cwd.createDir(io, "src", .default_dir);
@@ -839,7 +839,7 @@ fn printMembers(allocator: std.mem.Allocator, writer: anytype, decl: *const Walk
 
 fn getFullPath(allocator: std.mem.Allocator, std_dir_path: []const u8, file_path: []const u8) ![]const u8 {
     // If already an absolute path, return as-is
-    if (std.fs.path.isAbsolute(file_path)) {
+    if (std.Io.Dir.path.isAbsolute(file_path)) {
         return allocator.dupe(u8, file_path);
     }
 
