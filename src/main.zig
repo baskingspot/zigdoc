@@ -2,6 +2,12 @@ const std = @import("std");
 const Walk = @import("Walk.zig");
 const log = std.log.scoped(.zigdoc);
 
+// The walk logs every std-lib import at `debug`, and an executable's default
+// level is `debug`, so a plain run printed thousands of lines to stderr before
+// the answer. Nothing else in the program logs. Set this to `.debug` to see the
+// import trace again.
+pub const std_options: std.Options = .{ .log_level = .warn };
+
 const build_runner_0_14 = @embedFile("build_runner_0.14.zig");
 const build_runner_0_15 = @embedFile("build_runner_0.15.zig");
 const build_runner_0_16 = @embedFile("build_runner_0.16.zig");
@@ -46,7 +52,13 @@ pub fn main(init: std.process.Init) !void {
     Walk.init(arena.allocator(), io);
     Walk.Decl.init(arena.allocator());
 
-    const std_dir_path = try getStdDir(io, arena);
+    const std_dir_path = getStdDir(io, arena) catch |err| switch (err) {
+        error.FileNotFound => {
+            try std.Io.File.stderr().writeStreamingAll(io, "zigdoc: no 'zig' on PATH\n");
+            std.process.exit(1);
+        },
+        else => return err,
+    };
 
     // Only parse std library if the symbol starts with "std"
     if (std.mem.startsWith(u8, symbol.?, "std")) {
